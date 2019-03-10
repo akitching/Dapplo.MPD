@@ -1,4 +1,4 @@
-﻿//  Dapplo - building blocks for desktop applications
+//  Dapplo - building blocks for desktop applications
 //  Copyright (C) 2016 Dapplo
 // 
 //  For more information see: http://dapplo.net/
@@ -23,7 +23,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using Dapplo.Log.Facade;
+using Dapplo.Log;
 using Dapplo.Log.XUnit;
 using Dapplo.MPD.Client;
 using Xunit;
