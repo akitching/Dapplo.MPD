@@ -98,6 +98,27 @@ namespace Dapplo.MPD.Client
 		}
 
 		/// <summary>
+		///     Initialize the MpdSocketClient
+		/// </summary>
+		/// <param name="hostname"></param>
+		/// <param name="port"></param>
+		/// <param name="password"></param>
+		/// <returns>Task to await</returns>
+		protected async Task InitAsync(string hostname, int port, string password)
+		{
+			await InitAsync(hostname, port);
+
+			Log.Debug().WriteLine("Sending MPD password");
+			MpdResponse response = SendCommandAsync("password " + password).Result;
+			if (!response.IsOk)
+			{
+				throw new Exception(response.ErrorMessage);
+			}
+
+			Log.Debug().WriteLine("Password accepted");
+		}
+
+		/// <summary>
 		///     Wait for a response
 		/// </summary>
 		/// <returns>MpdResponse</returns>
