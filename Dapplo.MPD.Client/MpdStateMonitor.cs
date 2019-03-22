@@ -83,10 +83,14 @@ namespace Dapplo.MPD.Client
 		/// <param name="hostname"></param>
 		/// <param name="port"></param>
 		/// <returns>Task which return MpdStateMonitor</returns>
-		public static async Task<MpdStateMonitor> CreateAsync(string hostname, int port)
+		/*public static async Task<MpdStateMonitor> CreateAsync(string hostname, int port)
+		{
+			return CreateAsync(hostname, port, null);
+		}*/
+		public static async Task<MpdStateMonitor> CreateAsync(string hostname, int port, string password)
 		{
 			var mpdStateMonitor = new MpdStateMonitor();
-			await mpdStateMonitor.InitAsync(hostname, port);
+			await mpdStateMonitor.InitAsync(hostname, port, password);
 			return mpdStateMonitor;
 		}
 
@@ -96,9 +100,28 @@ namespace Dapplo.MPD.Client
 		/// <param name="hostname"></param>
 		/// <param name="port"></param>
 		/// <returns>Task to await</returns>
-		private async Task InitAsync(string hostname, int port)
+		/*private async Task InitAsync(string hostname, int port)
 		{
-			_mpdSocketClient = await MpdSocketClient.CreateAsync(hostname, port);
+			await InitAsync(hostname, port, null);
+		}*/
+		/// <summary>
+		///     Initialize the MpdStateMonitor
+		/// </summary>
+		/// <param name="hostname"></param>
+		/// <param name="port"></param>
+		/// <param name="password"></param>
+		/// <returns>Task to await</returns>
+		private async Task InitAsync(string hostname, int port, string password)
+		{
+			if (password != null)
+			{
+				_mpdSocketClient = await MpdSocketClient.CreateAsync(hostname, port, password);
+			}
+			else
+			{
+				_mpdSocketClient = await MpdSocketClient.CreateAsync(hostname, port);
+			}
+
 			// TODO: store in member variable to prevent GC?
 			// ReSharper disable once UnusedVariable
 			var ignoringTask = BackgroundCheckerAsync();

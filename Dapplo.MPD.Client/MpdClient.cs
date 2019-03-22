@@ -57,6 +57,20 @@ namespace Dapplo.MPD.Client
 		}
 
 		/// <summary>
+		///     Static factory to create a MpdClient
+		/// </summary>
+		/// <param name="hostname"></param>
+		/// <param name="port"></param>
+		/// <param name="password"></param>
+		/// <returns>Task which return MpdClient</returns>
+		public new static async Task<MpdClient> CreateAsync(string hostname, int port, string password)
+		{
+			var mpdClient = new MpdClient();
+			await mpdClient.InitAsync(hostname, port, password);
+			return mpdClient;
+		}
+
+		/// <summary>
 		///     Sets crossfading between songs
 		/// </summary>
 		/// <param name="seconds"></param>

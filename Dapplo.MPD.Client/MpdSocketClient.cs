@@ -64,6 +64,20 @@ namespace Dapplo.MPD.Client
 		}
 
 		/// <summary>
+		///     Static factory to create a MpdSocketClient
+		/// </summary>
+		/// <param name="hostname"></param>
+		/// <param name="port"></param>
+		/// <param name="password"></param>
+		/// <returns>Task which return MpdSocketClient</returns>
+		public static async Task<MpdSocketClient> CreateAsync(string hostname, int port, string password)
+		{
+			var mpdSocketClient = new MpdSocketClient();
+			await mpdSocketClient.InitAsync(hostname, port, password).ConfigureAwait(false);
+			return mpdSocketClient;
+		}
+
+		/// <summary>
 		///     Detect running MPD instances via ZeroConf
 		/// </summary>
 		/// <returns></returns>
@@ -108,14 +122,17 @@ namespace Dapplo.MPD.Client
 		{
 			await InitAsync(hostname, port);
 
-			Log.Debug().WriteLine("Sending MPD password");
-			MpdResponse response = SendCommandAsync("password " + password).Result;
-			if (!response.IsOk)
+			if (password != null)
 			{
-				throw new Exception(response.ErrorMessage);
-			}
+				Log.Debug().WriteLine("Sending MPD password");
+				MpdResponse response = SendCommandAsync("password " + password).Result;
+				if (!response.IsOk)
+				{
+					throw new Exception(response.ErrorMessage);
+				}
 
-			Log.Debug().WriteLine("Password accepted");
+				Log.Debug().WriteLine("Password accepted");
+			}
 		}
 
 		/// <summary>
