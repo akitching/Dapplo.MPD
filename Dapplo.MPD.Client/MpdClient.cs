@@ -99,6 +99,12 @@ namespace Dapplo.MPD.Client
 						int.TryParse(value, out id);
 						currentSong.Id = id;
 						break;
+					case "Album":
+						currentSong.Album = value;
+						break;
+					case "Artist":
+						currentSong.Artist = value;
+						break;
 					default:
 						Debug.WriteLine($"Unprocessed current song info: {nameValue[0]}");
 						break;
@@ -343,16 +349,27 @@ namespace Dapplo.MPD.Client
 						Enum.TryParse(value, true, out playState);
 						status.PlayState = playState;
 						break;
+					case "time":// Legacy support for MPD 0.19.*
+						int duration, elapsed;
+						var parts = value.Split(new[] {':'}, 2);
+						int.TryParse(parts[0], out elapsed);
+						int.TryParse(parts[1], out duration);
+						// Only set elapsed and duration if they have not already been set using their more accurate versions
+						if (status.Elapsed.Ticks == 0)
+							status.Elapsed = TimeSpan.FromSeconds(elapsed);
+						if (status.Duration.Ticks == 0)
+							status.Duration = TimeSpan.FromSeconds(duration);
+						break;
 					case "elapsed":
+					case "duration":
 						int seconds, milliseconds;
 						var timeParts = value.Split(new[] {'.'}, 2);
 						int.TryParse(timeParts[0], out seconds);
 						int.TryParse(timeParts[1], out milliseconds);
-
-						status.Elapsed = TimeSpan.FromSeconds(seconds) + TimeSpan.FromMilliseconds(milliseconds);
-						break;
-					case "duration":
-						status.Duration = TimeSpan.Parse(value);
+						if (name == "elapsed")
+							status.Elapsed = TimeSpan.FromSeconds(seconds) + TimeSpan.FromMilliseconds(milliseconds);
+						else
+							status.Duration = TimeSpan.FromSeconds(seconds) + TimeSpan.FromMilliseconds(milliseconds);
 						break;
 					default:
 						Debug.WriteLine($"Unprocessed status: {nameValue[0]}");

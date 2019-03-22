@@ -50,5 +50,15 @@ namespace Dapplo.MPD.Client
 		///     Title of song
 		/// </summary>
 		public string Title { get; set; }
+
+		/// <summary>
+		///     Album of song
+		/// </summary>
+		public string Album { get; set; }
+
+		/// <summary>
+		///     Artist of song
+		/// </summary>
+		public string Artist { get; set; }
 	}
 }
