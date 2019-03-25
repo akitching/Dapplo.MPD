@@ -294,6 +294,10 @@ namespace Dapplo.MPD.Client
 			foreach (var statusEntry in response.ResponseLines)
 			{
 				var nameValue = statusEntry.Split(new[] {':'}, 2);
+				if (nameValue.Length < 2) {
+					Console.WriteLine("ERROR: Value missing in status query - " + nameValue[0]);
+					continue;
+				}
 				var name = nameValue[0];
 				var value = nameValue[1].Trim();
 				switch (name)

@@ -122,7 +122,7 @@ namespace Dapplo.MPD.Client
 		{
 			await InitAsync(hostname, port);
 
-			if (password != null)
+			if (!String.IsNullOrWhiteSpace(password))
 			{
 				Log.Debug().WriteLine("Sending MPD password");
 				MpdResponse response = SendCommandAsync("password " + password).Result;
