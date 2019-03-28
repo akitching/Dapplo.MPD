@@ -45,6 +45,15 @@ namespace Dapplo.MPD.Client
 
 		private TcpClient _tcpClient;
 
+		public Boolean IsAlive() {
+			try {
+				return SendCommandAsync("ping").Result.IsOk;
+			} catch (Exception) {
+				// Any exception means the connection is dead
+				return false;
+			}
+		}
+
 		/// <summary>
 		///     The MPD connection version, not the version of MPD itself
 		/// </summary>
